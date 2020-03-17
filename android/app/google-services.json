@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "867971720403",
+    "firebase_url": "https://book-flutter.firebaseio.com",
+    "project_id": "book-flutter",
+    "storage_bucket": "book-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867971720403:android:198211e4bd01cb802ea026",
+        "android_client_info": {
+          "package_name": "com.example.book_store"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867971720403-82h0hfucam5e8d71jn6bsm8a9m7u8oki.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGb3oQHvlLCvj8RKxYwzBnpGWchVW2Lsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867971720403-82h0hfucam5e8d71jn6bsm8a9m7u8oki.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

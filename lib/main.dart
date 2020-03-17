@@ -1,4 +1,5 @@
 import 'package:book_store/core/provider/app_provider.dart';
+import 'package:book_store/core/provider/book_provider.dart';
 import 'package:book_store/ui/screens/splash.dart';
 import 'package:book_store/util/constant.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppProvider()),
+        ChangeNotifierProvider(create: (_) => BookProvider()),
       ],
       child: MyApp(),
     ),

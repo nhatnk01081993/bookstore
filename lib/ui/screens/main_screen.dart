@@ -1,4 +1,5 @@
 import 'package:book_store/core/provider/app_provider.dart';
+import 'package:book_store/ui/screens/home_screen.dart';
 import 'package:book_store/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -11,27 +12,7 @@ class MainScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Book Store'),
       ),
-      body: Container(
-        child: Center(
-          child: SwitchListTile(
-            secondary: Icon(Feather.moon),
-            title: Text("Dark Mode"),
-            value:
-                Provider.of<AppProvider>(context).theme == Constants.lightTheme
-                    ? false
-                    : true,
-            onChanged: (v) {
-              if (v) {
-                Provider.of<AppProvider>(context, listen: false)
-                    .setTheme(Constants.darkTheme, "dark");
-              } else {
-                Provider.of<AppProvider>(context, listen: false)
-                    .setTheme(Constants.lightTheme, "light");
-              }
-            },
-          ),
-        ),
-      ),
+      body: HomeScreen(),
       drawer: Drawer(),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
