@@ -1,19 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Book {
+  final int id;
   final String name;
-  final int votes;
-  final DocumentReference reference;
+  final DateTime createdAt;
+  final String thumbnail;
+  final int chapter;
 
-  Book.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['name'] != null),
-        assert(map['votes'] != null),
-        name = map['name'],
-        votes = map['votes'];
+  Book({this.id, this.name, this.createdAt, this.thumbnail, this.chapter});
 
-  Book.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
-
-  @override
-  String toString() => "Record<$name:$votes>";
+  factory Book.fromJson(Map<String, dynamic> json) {
+    return Book(
+      id: json['id'],
+      name: json['name'],
+      createdAt: json['createdAt'],
+      thumbnail: json['thumbnail'],
+      chapter: json['chapter'],
+    );
+  }
 }

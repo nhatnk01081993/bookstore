@@ -1,9 +1,6 @@
-import 'package:book_store/core/provider/app_provider.dart';
 import 'package:book_store/ui/screens/home_screen.dart';
-import 'package:book_store/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:provider/provider.dart';
 
 class MainScreen extends StatelessWidget {
   @override
