@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: CircularProgressIndicator(),
               )
             : RefreshIndicator(
-                onRefresh: () => bookProvider.getBook(),
+                onRefresh: null,
                 child: ListView(
                   children: <Widget>[
                     Container(
@@ -30,7 +30,27 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 15),
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {},
+                          itemCount: bookProvider.recent.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            Book book = bookProvider.recent[index];
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Hero(
+                                tag: null,
+                                child: Material(
+                                  type: MaterialType.transparency,
+                                  child: Text(
+                                    book.name,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w800,
+                                      color: Theme.of(context).accentColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),

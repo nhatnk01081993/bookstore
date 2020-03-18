@@ -1,4 +1,4 @@
-import 'package:book_store/ui/screens/home_screen.dart';
+import 'package:book_store/ui/screens/test_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
@@ -9,7 +9,10 @@ class MainScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Book Store'),
       ),
-      body: HomeScreen(),
+      body: TestScreen(),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        print('object');
+      }),
       drawer: Drawer(),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
