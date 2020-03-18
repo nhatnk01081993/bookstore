@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:book_store/core/models/book_model.dart';
+import 'package:book_store/core/models/album_model.dart';
 import 'package:book_store/util/constant_url.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class TestScreen extends StatefulWidget {
@@ -13,61 +13,59 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
-  List<Book> list = new List<Book>();
+  List<Album> _list = new List<Album>();
   var isLoading = false;
-  _fetchData() async {
+
+  Future<List<Album>> get fetchPosts async {
     setState(() {
       isLoading = true;
     });
-    final response = await http.get(ApiUrl.urlBooks);
+    http.Response response = await http.get(ApiUrl.urlTest);
     if (response.statusCode == 200) {
-      List<dynamic> values = new List<dynamic>();
-      values = json.decode(response.body);
-      if (values.length > 0) {
-        for (int i = 0; i < values.length; i++) {
-          if (values[i] != null) {
-            Map<String, dynamic> map = values[i];
-            list.add(Book.fromJson(map));
-            debugPrint('Id-------${map['id']}');
-          }
-        }
-      }
+      List responseJson = json.decode(response.body);
+      _list = responseJson.map((m) => new Album.fromJson(m)).toList();
+      setState(() {
+        isLoading = false;
+      });
+      return _list;
     } else {
-      throw Exception('Failed to load photos');
+      Fluttertoast.showToast(
+        msg: 'value',
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIos: 1,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 600,
-      child: Column(
-        children: <Widget>[
-          isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.all(10.0),
-                      title: new Text(list[index].name),
-                      trailing: new Image.network(
-                        list[index].thumbnail,
-                        fit: BoxFit.cover,
-                        height: 40.0,
-                        width: 40.0,
-                      ),
-                    );
-                  }),
-          IconButton(
-              icon: Icon(Feather.database),
-              onPressed: () {
-                _fetchData();
-              })
-        ],
-      ),
-    );
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Fetch Data JSON"),
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: RaisedButton(
+            child: new Text("Fetch Data"),
+            onPressed: () {
+              fetchPosts;
+            },
+          ),
+        ),
+        body: isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : ListView.builder(
+                itemCount: _list.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    contentPadding: EdgeInsets.all(10.0),
+                    title: new Text(
+                      _list[index].title,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  );
+                }));
   }
 }

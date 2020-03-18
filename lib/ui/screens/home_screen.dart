@@ -20,7 +20,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: CircularProgressIndicator(),
               )
             : RefreshIndicator(
-                onRefresh: null,
+                onRefresh: () async {
+                  bookProvider.loadBook;
+                },
                 child: ListView(
                   children: <Widget>[
                     Container(
@@ -30,9 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 15),
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
-                          itemCount: bookProvider.recent.length,
+                          itemCount: bookProvider.recentBook.length,
                           itemBuilder: (BuildContext context, int index) {
-                            Book book = bookProvider.recent[index];
+                            Book book = bookProvider.recentBook[index];
                             return Padding(
                               padding: EdgeInsets.symmetric(horizontal: 5),
                               child: Hero(

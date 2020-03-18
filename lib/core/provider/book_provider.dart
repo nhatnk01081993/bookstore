@@ -1,19 +1,30 @@
+import 'dart:convert';
+
 import 'package:book_store/core/models/book_model.dart';
+import 'package:book_store/util/constant_url.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 
 class BookProvider extends ChangeNotifier {
   String message;
-  List<Book> recent = List();
+  List<Book> recentBook = new List<Book>();
   bool loading = true;
+
+  Future<Book> get loadBook async {
+    setLoading(true);
+    http.Response response = await http.get(ApiUrl.urlTest);
+    if (response.statusCode == 200) {
+      List responseJson = json.decode(response.body);
+      var recentData = responseJson.map((m) => new Book.fromJson(m)).toList();
+      setRecent(recentData);
+      setLoading(false);
+    }
+  }
 
   void setLoading(value) {
     loading = value;
     notifyListeners();
-  }
-
-  bool isLoading() {
-    return loading;
   }
 
   void setMessage(value) {
@@ -31,11 +42,7 @@ class BookProvider extends ChangeNotifier {
   }
 
   void setRecent(value) {
-    recent.add(value);
+    recentBook = value;
     notifyListeners();
-  }
-
-  List<Book> getRecent() {
-    return recent;
   }
 }
