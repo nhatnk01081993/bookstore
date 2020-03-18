@@ -1,33 +1,161 @@
+import 'dart:io';
+
 import 'package:book_store/ui/screens/home_screen.dart';
-import 'package:book_store/ui/screens/test_api.dart';
+import 'package:book_store/ui/widgets/custom_alert.dart';
+import 'package:book_store/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  PageController _pageController;
+  int _page = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Book Store'),
+    return WillPopScope(
+      onWillPop: () => exitDialog(context),
+      child: Scaffold(
+        body: PageView(
+          physics: NeverScrollableScrollPhysics(),
+          controller: _pageController,
+          onPageChanged: onPageChanged,
+          children: <Widget>[
+            HomeScreen(),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          selectedItemColor: Theme.of(context).accentColor,
+          unselectedItemColor: Colors.grey[500],
+          elevation: 20,
+          type: BottomNavigationBarType.fixed,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(
+                Feather.home,
+              ),
+              title: SizedBox(),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Feather.compass,
+              ),
+              title: SizedBox(),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Feather.settings,
+              ),
+              title: SizedBox(),
+            ),
+          ],
+          onTap: navigationTapped,
+          currentIndex: _page,
+        ),
       ),
-      body: HomeScreen(),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        print('object');
-      }),
-      drawer: Drawer(),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        selectedItemColor: Theme.of(context).accentColor,
-        unselectedItemColor: Colors.grey[500],
-        elevation: 20,
-        type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Feather.home), title: SizedBox()),
-          BottomNavigationBarItem(
-              icon: Icon(Feather.server), title: SizedBox()),
-          BottomNavigationBarItem(icon: Icon(Feather.book), title: SizedBox()),
-          BottomNavigationBarItem(icon: Icon(Feather.user), title: SizedBox()),
-        ],
+    );
+  }
+
+  void navigationTapped(int page) {
+    _pageController.jumpToPage(page);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: 0);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      this._page = page;
+    });
+  }
+
+  exitDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => CustomAlert(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(height: 15),
+              Text(
+                Constants.appName,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(height: 25),
+              Text(
+                "Are you sure you want to quit?",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    height: 40,
+                    width: 130,
+                    child: OutlineButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      borderSide:
+                          BorderSide(color: Theme.of(context).accentColor),
+                      child: Text(
+                        "No",
+                        style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                        ),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      color: Colors.white,
+                    ),
+                  ),
+                  Container(
+                    height: 40,
+                    width: 130,
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Text(
+                        "Yes",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () => exit(0),
+                      color: Theme.of(context).accentColor,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+            ],
+          ),
+        ),
       ),
     );
   }

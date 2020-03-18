@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:book_store/ui/screens/main_screen.dart';
 import 'package:book_store/ui/screens/test_api.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,7 @@ class _SplashState extends State<Splash> {
       context,
       PageTransition(
         type: PageTransitionType.rightToLeft,
-        child: MainScreen(),
+        child: TestScreen(),
       ),
     );
   }

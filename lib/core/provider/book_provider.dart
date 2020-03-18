@@ -11,13 +11,16 @@ class BookProvider extends ChangeNotifier {
   List<Book> recentBook = new List<Book>();
   bool loading = true;
 
-  Future<Book> get loadBook async {
+  Future<List<Book>> get loadBook async {
     setLoading(true);
-    http.Response response = await http.get(ApiUrl.urlTest);
+    http.Response response = await http.get(ApiUrl.urlBooks);
     if (response.statusCode == 200) {
       List responseJson = json.decode(response.body);
-      var recentData = responseJson.map((m) => new Book.fromJson(m)).toList();
-      setRecent(recentData);
+      recentBook = responseJson.map((m) => new Book.fromJson(m)).toList();
+      setRecent(recentBook);
+      setLoading(false);
+      return recentBook;
+    } else {
       setLoading(false);
     }
   }

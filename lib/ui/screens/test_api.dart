@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:book_store/core/models/album_model.dart';
+import 'package:book_store/core/models/book_model.dart';
+import 'package:book_store/ui/widgets/book_card.dart';
 import 'package:book_store/util/constant_url.dart';
 
 import 'package:flutter/material.dart';
@@ -13,17 +15,17 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
-  List<Album> _list = new List<Album>();
+  List<Book> _list = new List<Book>();
   var isLoading = false;
 
-  Future<List<Album>> get fetchPosts async {
+  Future<List<Book>> get fetchPosts async {
     setState(() {
       isLoading = true;
     });
-    http.Response response = await http.get(ApiUrl.urlTest);
+    http.Response response = await http.get(ApiUrl.urlBooks);
     if (response.statusCode == 200) {
       List responseJson = json.decode(response.body);
-      _list = responseJson.map((m) => new Album.fromJson(m)).toList();
+      _list = responseJson.map((m) => new Book.fromJson(m)).toList();
       setState(() {
         isLoading = false;
       });
@@ -56,16 +58,26 @@ class _TestScreenState extends State<TestScreen> {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : ListView.builder(
-                itemCount: _list.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    contentPadding: EdgeInsets.all(10.0),
-                    title: new Text(
-                      _list[index].title,
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  );
-                }));
+            : RefreshIndicator(
+                onRefresh: () async {
+                  fetchPosts;
+                },
+                child: ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _list.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      Book book = _list[index];
+                      return Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                        child: BookCard(
+                          img: book.url,
+                          book: book,
+                        ),
+                      );
+                    }),
+              ));
   }
 }
