@@ -29,4 +29,8 @@ class Constants {
   static Color darkBG = Colors.black;
 
   static String appName = "Book Store";
+  //Home
+  static double topRecentHeight = 150.0;
+  static double topRecentHorizontal = 5.0;
+  static double topRecentVertical = 10.0;
 }

@@ -11,87 +11,103 @@ class HomeScreen extends StatelessWidget {
     return Consumer<BookProvider>(
       builder: (BuildContext context, BookProvider bookProvider, Widget child) {
         return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              "${Constants.appName}",
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-          ),
-          body: bookProvider.loading
-              ? Center(
-                  child: CircularProgressIndicator(),
+          body: NestedScrollView(
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverAppBar(
+                  expandedHeight: 100.0,
+                  floating: false,
+                  pinned: true,
+                  flexibleSpace: FlexibleSpaceBar(
+                      centerTitle: true,
+                      title: Text("Collapsing Toolbar",
+                          style: TextStyle(
+                            color: Colors.lightBlueAccent,
+                            fontSize: 16.0,
+                          )),
+                      background: Image.network(
+                        "https://images.pexels.com/photos/396547/pexels-photo-396547.jpeg?auto=compress&cs=tinysrgb&h=120",
+                        fit: BoxFit.cover,
+                      )),
                 )
-              : RefreshIndicator(
-                  onRefresh: () => bookProvider.loadBook,
-                  child: ListView(
-                    children: <Widget>[
-                      Container(
-                        height: 200,
-                        child: Center(
-                          child: ListView.builder(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: bookProvider.recentBook.length,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              Book book = bookProvider.recentBook[index];
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 10),
-                                child: BookCard(
-                                  img: book.url,
-                                  book: book,
-                                ),
-                              );
-                            },
+              ];
+            },
+            body: bookProvider.loading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : RefreshIndicator(
+                    onRefresh: () => bookProvider.loadBook,
+                    child: ListView(
+                      children: <Widget>[
+                        Text(
+                          bookProvider.recentBook.length.toString(),
+                          style: TextStyle(color: Colors.lightBlue),
+                        ),
+                        Container(
+                          height: Constants.topRecentHeight,
+                          child: Center(
+                            child: ListView.builder(
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: bookProvider.recentBook.length,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                Book book = bookProvider.recentBook[index];
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: Constants.topRecentHorizontal,
+                                      vertical: Constants.topRecentVertical),
+                                  child: BookCard(
+                                    img: book.url,
+                                    book: book,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "Categories",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                        SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "Recently Added",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                "Categories",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                "Recently Added",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-          floatingActionButton: FloatingActionButton(onPressed: () {
-            bookProvider.loadBook;
-          }),
+          ),
         );
       },
     );

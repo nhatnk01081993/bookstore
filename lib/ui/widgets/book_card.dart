@@ -1,5 +1,4 @@
 import 'package:book_store/core/models/book_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -40,16 +39,7 @@ class BookCard extends StatelessWidget {
             ),
             child: Hero(
               tag: imgTag,
-              child: CachedNetworkImage(
-                imageUrl: "$img",
-                placeholder: (context, url) =>
-                    Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) => Image.asset(
-                  "assets/images/img1.jpg",
-                  fit: BoxFit.cover,
-                ),
-                fit: BoxFit.cover,
-              ),
+              child: Image.network(img),
             ),
           ),
         ),

@@ -7,22 +7,28 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class BookProvider extends ChangeNotifier {
+  BookProvider() {
+    loadBook;
+  }
+
   String message;
   List<Book> recentBook = new List<Book>();
   bool loading = true;
 
   Future<List<Book>> get loadBook async {
     setLoading(true);
-    http.Response response = await http.get(ApiUrl.urlBooks);
+    notifyListeners();
+    http.Response response = await http.get(ApiUrl.mockApiBooks);
     if (response.statusCode == 200) {
       List responseJson = json.decode(response.body);
-      recentBook = responseJson.map((m) => new Book.fromJson(m)).toList();
+      recentBook =
+          responseJson.map((m) => new Book.fromJson(m)).take(10).toList();
       setRecent(recentBook);
       setLoading(false);
-      return recentBook;
     } else {
-      setLoading(false);
+      setLoading(true);
     }
+    return recentBook;
   }
 
   void setLoading(value) {
